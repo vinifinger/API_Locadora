@@ -9,6 +9,7 @@ export class ReadMovieController {
     async handle(req: Request, res: Response): Promise<Response> {
        try {
             const result = await this.readMovieUseCase.execute();
+            console.log('----- READ -----');
             console.log(result);
 
            return res.status(200).json({result});

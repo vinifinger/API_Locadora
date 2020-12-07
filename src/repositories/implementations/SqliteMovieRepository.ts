@@ -38,12 +38,61 @@ export class SqliteMovieRepository implements IMovieRepository {
     async readMovie() {
         try {
             const data = await db('catalogo').select('*');
-            console.log(data);
             const movies = new Movies(data);
 
             return movies;
-        } catch (error) {
-            
+        } catch (err) {
+            return err;
         }
     };
+
+    async updateMovie(movie: Movie) {
+        
+        const { 
+            id,
+            name,
+            image,
+            description,
+            category,
+            producer,
+            duration
+        } = movie;
+
+        const trx = await db.transaction();
+
+        try {
+
+            await trx('catalogo').update({
+                name,
+                image,
+                description,
+                category,
+                producer,
+                duration
+            }).where('id', id);
+
+            trx.commit();
+        } catch (err) {
+            return err;
+        }
+    };
+
+    async deleteMovie(movie: Movie) {
+        
+        const {
+            id
+        } = movie;
+
+        const trx = await db.transaction();
+
+        try {
+            
+            await trx('catalogo').delete()
+            .where('id', id);
+
+            trx.commit();
+        } catch (err) {
+            return err;
+        }
+    }
 }
