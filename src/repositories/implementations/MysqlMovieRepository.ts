@@ -39,7 +39,7 @@ export class MysqlMovieRepository implements IMovieRepository {
 
     async readMovie(): Promise<Movies> {
         try {
-            const data = await db('movie').select('*');
+            const data = await db('movie').select('*').where('idStatus', 1);
             const movies = new Movies(data);
 
             return movies;

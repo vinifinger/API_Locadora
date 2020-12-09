@@ -9,11 +9,7 @@ export class Hash implements User {
     public readonly name?: string;
     public readonly password?: string;
 
-    constructor(props: Omit<Hash, 'hash'>, hash?: string) {
+    constructor(props: Hash) {
         Object.assign(this, props);
-
-        // if (!hash) {
-        //     this.hash = generatorHash({props});
-        // }
     }
 }

@@ -10,8 +10,7 @@ export class JwtMiddlewareRepository implements IMiddlewareRepository {
 
         if (data === 'undefined')
             return 0; // No token provided
-
-        return jwt.verify(data, 'secretstring', (err, decoded) => {
+        return jwt.verify(data, process.env.SECRET_STRING, (err, decoded) => {
             if (err) 
                 return 1; // Token invalid
             const hash = new Hash(decoded);

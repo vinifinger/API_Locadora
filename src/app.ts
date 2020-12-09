@@ -8,6 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Middleware
 app.use('/v1', (request, response, next) => {
     return middlewareController.handle(request, response, next);
 });

@@ -12,6 +12,9 @@ export async function up(knex: knex) {
         }, 
         {
             name: 'rented'
+        },
+        {
+            name: 'devolved'
         }
     ]);
 

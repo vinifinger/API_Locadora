@@ -1,6 +1,5 @@
 import { Hash } from "../../../entities/Hash";
 import { User } from "../../../entities/User";
-import jwt from 'jsonwebtoken';
 import { IUserRepository } from "../../../repositories/IUserRepository";
 import { ICreateUserRequestDTO } from "./CreateUserDTO";
 
@@ -15,6 +14,7 @@ export class CreateUserUseCase {
         console.log(user);
         
         const params = await this.userRepository.createUser(user);
-        return new Hash(params[0]);
+        const result = await this.userRepository.createHash(params);
+        return new Hash(result);
     }
 }

@@ -5,4 +5,6 @@ export interface IUserRepository {
     createUser(user: User): Promise<User>;    
 
     readUserbyLogin(user: User): Promise<User>;
+
+    createHash(user: User): Promise<Hash>;
 }

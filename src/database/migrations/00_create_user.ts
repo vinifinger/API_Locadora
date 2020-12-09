@@ -4,7 +4,6 @@ import { uuid } from 'uuidv4';
 
 export async function up(knex: knex) {
     await knex.schema.createTable('user', table => {
-        table.string('id').primary();
         table.string('email').notNullable();
         table.string('name').notNullable();
         table.string('password').notNullable();

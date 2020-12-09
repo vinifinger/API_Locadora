@@ -14,6 +14,7 @@ export class ReadUserUseCase {
         console.log(user);
         
         const params = await this.userRepository.readUserbyLogin(user);
-        return new Hash(params[0]);
+        const result = await this.userRepository.createHash(params);
+        return new Hash(result);
     }
 }
