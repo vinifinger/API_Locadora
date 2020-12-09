@@ -1,12 +1,6 @@
+import * as config from '../../knexfile';
 import Knex from 'knex';
-import * as path from 'path';
 
-const db = Knex({
-    client: 'sqlite3',
-    connection: {
-        filename: path.resolve(__dirname, 'database.sqlite')
-    },
-    useNullAsDefault: true,
-});
+const db = Knex(config);
 
-export default db;
+export { db } 
