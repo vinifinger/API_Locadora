@@ -11,19 +11,14 @@ export class CreateRentalUseCase {
     
     async execute(data: ICreateRentalRequestDTO): Promise<void> {
         const rental = new Rental(data);
-        console.log('----- CREATE -----');
-        console.log(rental);
         
-        const content = {
-            id : data.idMovie
-        };
+        const idMovie = data.idMovie
+        const result = await this.rentalRepository.readMoviebyStatus(idMovie);
 
-        const movie = new Movie(data, content.id);
+            if (result) {
+                return await this.rentalRepository.createRental(rental);
+            }
 
-        const result = await this.rentalRepository.readMoviebyStatus(movie);
-
-        console.log(result);
-        
-        return await this.rentalRepository.createRental(rental);
+            throw new Error('Movie is rented.');
     }
 }

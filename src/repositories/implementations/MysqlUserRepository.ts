@@ -46,12 +46,11 @@ export class MysqlUserRepository implements IUserRepository {
 
     async createHash(user: User): Promise<Hash> {
         const result = { hash: '' };
-        console.log('-------')
-        console.log(user)
+        (user)
          result.hash = jwt.sign({ user }, process.env.SECRET_STRING, {
             expiresIn: 28800
         });
-        console.log(result)
+        (result)
 
 
         return new Hash(result);

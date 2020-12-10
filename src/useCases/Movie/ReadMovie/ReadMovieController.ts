@@ -11,8 +11,6 @@ export class ReadMovieController {
 
        try {
             const result = await this.readMovieUseCase.execute({title});
-            console.log('----- READ -----');
-            console.log(result);
 
            return res.status(200).json({result});
        } catch (err) {

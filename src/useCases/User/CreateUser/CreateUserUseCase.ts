@@ -10,12 +10,10 @@ export class CreateUserUseCase {
     
     async execute(data: ICreateUserRequestDTO) {
         const user = new User(data);
-        console.log('----- CREATE -----');
-        console.log(user);
         
         const content = await this.userRepository.findUserbyemail(data.email);
 
-        if (content) {
+        if (content.email) {
             throw new Error('Email already exists.');
         }
 

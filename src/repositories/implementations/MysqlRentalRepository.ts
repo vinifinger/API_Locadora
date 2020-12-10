@@ -147,7 +147,7 @@ export class MysqlRentalRepository implements IRentalRepository {
                 .join('movie', 'rental.idMovie', 'movie.id')
                 .join('user', 'rental.emailUser', 'user.email')
                 .join('status', 'rental.idStatus', 'status.id')
-                .where('rental.email', emailUser);
+                .where('rental.emailUser', emailUser);
             
             
             const rents = new Rents(content);
@@ -158,16 +158,12 @@ export class MysqlRentalRepository implements IRentalRepository {
         }
     }
 
-    async readMoviebyStatus (movie: Movie): Promise<Movie> {
-        
-        const {
-            id
-        } = movie;
+    async readMoviebyStatus (idMovie: string) {
 
         try {
-            const content = await db('movie').where('id', id).andWhere('idStatus', 1);
+            const content = await db('movie').where('id', idMovie).andWhere('idStatus', 1);
 
-            return new Movie(content[0]);
+            return content[0];
         } catch (err) {
             throw new Error(err);
         }
@@ -187,7 +183,7 @@ export class MysqlRentalRepository implements IRentalRepository {
                 .select('idMovie')
                 .where('id', id);
 
-            console.log(content[0].idMovie);
+            (id);
 
             await trx('movie').update({
                 idStatus: 1

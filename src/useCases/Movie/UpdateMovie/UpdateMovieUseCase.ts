@@ -9,8 +9,6 @@ export class UpdateMovieUseCase {
     
     async execute(data: IUpdateMovieRequestDTO) {
         const movie = new Movie(data, data.id);
-        console.log('----- UPDATE -----');
-        console.log(movie);
         
         await this.movieRepository.updateMovie(movie);
     }

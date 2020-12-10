@@ -9,8 +9,6 @@ export class CreateMovieUseCase {
     
     async execute(data: ICreateMovieRequestDTO) {
         const movie = new Movie(data);
-        console.log('----- CREATE -----');
-        console.log(movie);
         
         await this.movieRepository.createMovie(movie);
     }

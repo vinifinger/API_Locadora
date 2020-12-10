@@ -9,7 +9,7 @@ export interface IRentalRepository {
     readRentalbyId(rental: Rental): Promise<Rents>;
     readRentalbyMovie(rental: Rental): Promise<Rents>;
     readRentalbyUser(rental: Rental): Promise<Rents>;
-    readMoviebyStatus(movie: Movie): Promise<Movie>;
+    readMoviebyStatus(idMovie: string): Promise<Movie>;
 
     updateRental(rental: Rental): Promise<void>;
 }

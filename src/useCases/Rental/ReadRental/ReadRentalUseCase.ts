@@ -10,8 +10,8 @@ export class ReadRentalUseCase {
     
     async execute(data: IReadRentalRequestDTO): Promise<Rents> {
         const rental = new Rental(data, data.id);
-        console.log('----- READ -----');
-        console.log(rental);
+        ('----- READ -----');
+        (rental);
         
         if (rental.id != 'undefined')
             return await this.rentalRepository.readRentalbyId(rental);    

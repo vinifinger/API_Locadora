@@ -13,7 +13,7 @@ export class MiddlewareController {
             const response = await this.middlewareUseCase.execute({
                 hash
            });
-
+           
            switch(response) {
                 case 0: 
                     return res.status(401).json({

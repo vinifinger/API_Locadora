@@ -9,8 +9,7 @@ export class MysqlMovieRepository implements IMovieRepository {
         const { 
             id,
             title,
-            director,
-            idStatus
+            director
         } = movie;
     
         const trx = await db.transaction();
@@ -20,7 +19,7 @@ export class MysqlMovieRepository implements IMovieRepository {
                 id,
                 title,
                 director,
-                idStatus
+                idStatus: 1
             });
 
             trx.commit();

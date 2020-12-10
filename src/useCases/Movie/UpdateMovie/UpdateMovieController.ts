@@ -18,7 +18,7 @@ export class UpdateMovieController {
                 idStatus
            });
 
-           return res.status(201).send();
+           return res.status(200).send();
        } catch (err) {
            return res.status(400).json({
                message: err.message || 'Unexpected error.'

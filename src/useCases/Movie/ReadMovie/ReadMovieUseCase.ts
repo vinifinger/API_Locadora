@@ -9,8 +9,6 @@ export class ReadMovieUseCase {
     
     async execute(data: IReadMovieRequestDTO): Promise<Movie> {
         const movie = new Movie(data);
-        console.log('----- READ BY NAME -----');
-        console.log(movie);
         
         if (movie.title != 'undefined')
             return await this.movieRepository.readMoviebyName(movie);

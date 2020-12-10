@@ -10,8 +10,6 @@ export class DeleteMovieUseCase {
     
     async execute(data: IDeleteMovieRequestDTO) {
         const movie = new Movie(data, data.id);
-        console.log('----- DELETE -----');
-        console.log(movie);
         
         await this.movieRepository.deleteMovie(movie);
     }

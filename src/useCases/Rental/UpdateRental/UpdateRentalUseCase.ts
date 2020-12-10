@@ -9,8 +9,8 @@ export class UpdateRentalUseCase {
     
     async execute(data: IUpdateRentalRequestDTO) {
         const rental = new Rental(data, data.id);
-        console.log('----- UPDATE -----');
-        console.log(rental);
+        ('----- UPDATE -----');
+        (rental);
         
         return await this.rentalRepository.updateRental(rental);
     }

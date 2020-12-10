@@ -11,8 +11,6 @@ export class LoginUserController {
 
        try {
             const result = await this.loginUserUseCase.execute({email, password});
-            console.log('----- READ -----');
-            console.log(result);
 
             if (!result)
             return res.status(400).json({ message: 'User and/or Password invalid.' });

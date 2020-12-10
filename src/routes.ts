@@ -21,7 +21,7 @@ routes.get('/v1/movie', (request, response) => {
     return readMovieController.handle(request, response);
 });
 
-routes.put('/v1/movie', (request, response) => {
+routes.patch('/v1/movie', (request, response) => {
     return updateMovieController.handle(request, response);
 });
 
@@ -55,7 +55,7 @@ routes.get('/v1/rental', (request, response) => {
     return readRentalController.handle(request, response);
 });
 
-routes.put('/v1/rental', (request, response) => {
+routes.patch('/v1/rental', (request, response) => {
     return updateRentalController.handle(request, response);
 });
 

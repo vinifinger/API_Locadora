@@ -7,9 +7,9 @@ export class CreateMovieController {
     ){}
 
     async handle(req: Request, res: Response): Promise<Response> {
-       const { title, director, idStatus }  = req.body;
+       const { title, director }  = req.body;
 
-        if ( !title || !director || !idStatus )
+        if ( !title || !director )
             return res.status(400).json({
                 message: 'Invalid field.'
             });
@@ -17,8 +17,7 @@ export class CreateMovieController {
        try {
             await this.createMovieUseCase.execute({
                 title,
-                director,
-                idStatus
+                director
            });
 
            return res.status(201).send();

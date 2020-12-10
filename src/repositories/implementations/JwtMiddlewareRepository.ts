@@ -2,7 +2,8 @@ import { Hash } from '../../entities/Hash';
 import jwt from 'jsonwebtoken';
 import { IMiddlewareRepository } from '../IMiddlewareRepository';
 import { db } from '../../database/connection';
-
+import * as dotenv from 'dotenv';
+dotenv.config();
 export class JwtMiddlewareRepository implements IMiddlewareRepository {
     async verifyHash(hash: Hash): Promise<Number> {
         
@@ -10,17 +11,16 @@ export class JwtMiddlewareRepository implements IMiddlewareRepository {
 
         if (data === 'undefined')
             return 0; // No token provided
+
+            
         return jwt.verify(data, process.env.SECRET_STRING, async (err, decoded) => {
             if (err) 
                 return 1; // Token invalid
                 
             decoded.user.hash = data;
-
             const hash = new Hash(decoded.user);
 
             try {    
-                console.log('------')
-                console.log(decoded)
                 
                 const content = await db('User')
                 .where('email', hash.email)
@@ -37,8 +37,9 @@ export class JwtMiddlewareRepository implements IMiddlewareRepository {
                     return 2;
                 }
 
-            } catch (err) {
                 return 3;
+            } catch (err) {
+                return err;
             }
             
         });

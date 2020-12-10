@@ -9,8 +9,8 @@ export class LogoffUserUseCase {
     
     async execute(data: ILogoffUserRequestDTO): Promise<void> {
         const hash = new Hash(data);
-        console.log('----- LOGOFF -----');
-        console.log(hash);
+        ('----- LOGOFF -----');
+        (hash);
         
         return await this.userRepository.deleteHash(hash);
     }
