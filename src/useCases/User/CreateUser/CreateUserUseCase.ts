@@ -8,11 +8,17 @@ export class CreateUserUseCase {
         private userRepository: IUserRepository 
     ){}
     
-    async execute(data: ICreateUserRequestDTO): Promise<Hash> {
+    async execute(data: ICreateUserRequestDTO) {
         const user = new User(data);
         console.log('----- CREATE -----');
         console.log(user);
         
+        const content = await this.userRepository.findUserbyemail(data.email);
+
+        if (content) {
+            throw new Error('Email already exists.');
+        }
+
         const params = await this.userRepository.createUser(user);
         const result = await this.userRepository.createHash(params);
         return new Hash(result);

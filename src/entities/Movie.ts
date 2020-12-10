@@ -7,6 +7,7 @@ export class Movie {
     public director?: string;    
     public image?: string;
     public description?: string;
+    public idStatus?: number;
     public category?: string;
     public producer?: string;
     public duration?: string;

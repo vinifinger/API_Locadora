@@ -5,9 +5,19 @@ import { Users } from "../../entities/Users";
 import { IUserRepository } from "../IUserRepository";
 import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
-import { updateRentalController } from "../../useCases/Rental/UpdateRental";
 dotenv.config();
 export class MysqlUserRepository implements IUserRepository {
+    async findUserbyemail(email: string): Promise<User> {
+        try {
+            const result = await db('user').where('email', email);
+
+            return new User(result[0]);
+        } catch (err) {
+            throw new Error(err);
+        }
+    }
+
+
     async createUser(user: User): Promise<User> {
     
         const {
@@ -28,25 +38,26 @@ export class MysqlUserRepository implements IUserRepository {
 
             trx.commit();
 
-            const data = await db('user').where('id', email);
-            const users = new Users(data);
-
-            return users;
+            return user;
         } catch (err) {
-            return err;   
+            throw new Error(err);
         }
     };
 
     async createHash(user: User): Promise<Hash> {
         const result = { hash: '' };
-         result.hash = jwt.sign( { user }, process.env.SECRET_STRING, {
+        console.log('-------')
+        console.log(user)
+         result.hash = jwt.sign({ user }, process.env.SECRET_STRING, {
             expiresIn: 28800
         });
         console.log(result)
+
+
         return new Hash(result);
     };
 
-    async readUserbyLogin(user: User): Promise<Users> {
+    async loginUser(user: User): Promise<Users | number> {
 
         const {
             email,
@@ -55,11 +66,28 @@ export class MysqlUserRepository implements IUserRepository {
 
         try {
             const data = await db('user').where('email', email).andWhere('password', password).limit(1);
+
+            if (!data.length) 
+                return 0
+
             const users = new Users(data);
 
             return users;
         } catch (err) {
-            return err;
+            throw new Error(err);
         }
     }
+
+    async deleteHash(hash: Hash): Promise<void> {
+        try {
+
+            await db('blackList').insert({
+                hash: hash.hash
+            });
+
+            return;
+        } catch (err) {
+            throw new Error(err);
+        }
+    };
 }

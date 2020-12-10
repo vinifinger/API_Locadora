@@ -9,13 +9,13 @@ export class ReadRentalController {
     async handle(req: Request, res: Response): Promise<Response> {
         const id = String(req.query.id);
         const idMovie = String(req.query.idMovie); 
-        const idUser = String(req.query.idUser);
+        const emailUser = String(req.query.emailUser);
 
         try {
             const result = await this.readRentalUseCase.execute({
                 id, 
                 idMovie,
-                idUser
+                emailUser
             });
 
            return res.status(200).json({result});

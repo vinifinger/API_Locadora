@@ -1,20 +1,23 @@
 import { Request, Response } from "express";
-import { ReadUserUseCase } from "./ReadUserUseCase";
+import { LoginUserUseCase } from "./LoginUserUseCase";
 
-export class ReadUserController {
+export class LoginUserController {
     constructor(
-        private readUserUseCase: ReadUserUseCase,
+        private loginUserUseCase: LoginUserUseCase,
     ){}
 
     async handle(req: Request, res: Response): Promise<Response> {
         const { email, password } = req.body;
 
        try {
-            const result = await this.readUserUseCase.execute({email, password});
+            const result = await this.loginUserUseCase.execute({email, password});
             console.log('----- READ -----');
             console.log(result);
 
-           return res.status(200).json({ result });
+            if (!result)
+            return res.status(400).json({ message: 'User and/or Password invalid.' });
+
+            return res.status(200).json({ result });
        } catch (err) {
            return res.status(400).json({
                message: err.message || 'Unexpected error.'

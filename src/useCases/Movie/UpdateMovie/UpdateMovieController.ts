@@ -7,19 +7,15 @@ export class UpdateMovieController {
     ){}
 
     async handle(req: Request, res: Response): Promise<Response> {
-       const { title, director, image, description, category, producer, duration }  = req.body;
-       const { id } = req.params;
+       const { title, director, idStatus }  = req.body;
+       const id = String(req.query.id);
 
        try {
             await this.updateMovieUseCase.execute({
                 id,
                 title,
                 director,
-                image,
-                description,
-                category,
-                producer,
-                duration,
+                idStatus
            });
 
            return res.status(201).send();

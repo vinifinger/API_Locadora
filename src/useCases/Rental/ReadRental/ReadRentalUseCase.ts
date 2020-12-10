@@ -14,13 +14,14 @@ export class ReadRentalUseCase {
         console.log(rental);
         
         if (rental.id != 'undefined')
-            return await this.rentalRepository.readRental(rental);    
+            return await this.rentalRepository.readRentalbyId(rental);    
 
         if (rental.idMovie != 'undefined')
             return await this.rentalRepository.readRentalbyMovie(rental);
 
-        if (rental.email != 'undefined')
+        if (rental.emailUser != 'undefined')
             return await this.rentalRepository.readRentalbyUser(rental);
         
+        return await this.rentalRepository.readRental();
     }
 }

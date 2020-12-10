@@ -3,7 +3,7 @@ import { uuid } from "uuidv4";
 export class Rental {
     public readonly id?: String;
 
-    public email?: string;
+    public emailUser?: string;
     public idMovie?: string;    
     public idStatus?: number;
     public dateStart?: string;

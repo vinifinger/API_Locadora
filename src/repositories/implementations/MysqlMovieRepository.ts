@@ -10,11 +10,7 @@ export class MysqlMovieRepository implements IMovieRepository {
             id,
             title,
             director,
-            image,
-            description,
-            category,
-            producer,
-            duration
+            idStatus
         } = movie;
     
         const trx = await db.transaction();
@@ -24,27 +20,31 @@ export class MysqlMovieRepository implements IMovieRepository {
                 id,
                 title,
                 director,
-                image,
-                description,
-                category,
-                producer,
-                duration
+                idStatus
             });
 
             trx.commit();
         } catch (err) {
-            return err;   
+            throw new Error(err);  
         }
     };
 
     async readMovie(): Promise<Movies> {
         try {
-            const data = await db('movie').select('*').where('idStatus', 1);
+            const data = await db('movie')
+            .select(
+                'movie.id',
+                'movie.title',
+                'movie.director',
+                'status.name AS status'
+            )
+            .join('status', 'status.id', 'movie.idStatus')
+            .where('movie.idStatus', 1);
             const movies = new Movies(data);
 
             return movies;
         } catch (err) {
-            return err;
+            throw new Error(err);
         }
     };
     async readMoviebyName(movie: Movie): Promise<Movies> {
@@ -54,12 +54,20 @@ export class MysqlMovieRepository implements IMovieRepository {
         } = movie;
 
         try {
-            const data = await db('movie').select('*').where('title', 'like', `%${title}%`);
+            const data = await db('movie')
+            .select(
+                'movie.id',
+                'movie.title',
+                'movie.director',
+                'status.name AS status'
+            )
+            .join('status', 'status.id', 'movie.idStatus')
+            .where('title', 'like', `%${title}%`);
             const movies = new Movies(data);
 
             return movies;
         } catch (err) {
-            return err;
+            throw new Error(err);
         }
     };
 
@@ -69,11 +77,7 @@ export class MysqlMovieRepository implements IMovieRepository {
             id,
             title,
             director,
-            image,
-            description,
-            category,
-            producer,
-            duration
+            idStatus
         } = movie;
 
         const trx = await db.transaction();
@@ -83,16 +87,12 @@ export class MysqlMovieRepository implements IMovieRepository {
             await trx('movie').update({
                 title,
                 director,
-                image,
-                description,
-                category,
-                producer,
-                duration
+                idStatus
             }).where('id', id);
 
             trx.commit();
         } catch (err) {
-            return err;
+            throw new Error(err);
         }
     };
 
@@ -111,7 +111,7 @@ export class MysqlMovieRepository implements IMovieRepository {
 
             trx.commit();
         } catch (err) {
-            return err;
+            throw new Error(err);
         }
     }
 }

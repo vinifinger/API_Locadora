@@ -1,4 +1,5 @@
 import { db } from "../../database/connection";
+import { Movie } from "../../entities/Movie";
 import { Rental } from "../../entities/Rental";
 import { Rents } from "../../entities/Rents";
 import { IRentalRepository } from "../IRentalRepository";
@@ -8,19 +9,21 @@ export class MysqlRentalRepository implements IRentalRepository {
     
         const { 
             id,
-            email,
+            emailUser,
             idMovie,
-            idStatus,
             dateStart,
             dateEnd
         } = rental;
+
+        const idStatus = 2;
     
         const trx = await db.transaction();
 
         try {
+
             await trx('rental').insert({
                 id,
-                email,
+                emailUser,
                 idMovie,
                 idStatus,
                 dateStart,
@@ -33,11 +36,36 @@ export class MysqlRentalRepository implements IRentalRepository {
 
             trx.commit();
         } catch (err) {
-            return err;   
+            throw new Error(err);
         }
     };
 
-    async readRental (rental: Rental): Promise<Rents> {
+    async readRental (): Promise<Rents> {
+        try {
+            const content = await db('rental')
+                .select(
+                    'rental.id AS id', 
+                    'rental.idMovie AS idMovie',
+                    'movie.title AS titleMovie', 
+                    'rental.emailUser AS emailUser', 
+                    'user.name AS nameUser', 
+                    'status.name AS status', 
+                    'rental.dateStart AS dateStart', 
+                    'rental.dateEnd AS dateEnd'
+                )
+                .join('movie', 'rental.idMovie', 'movie.id')
+                .join('user', 'rental.emailUser', 'user.email')
+                .join('status', 'rental.idStatus', 'status.id');
+            
+            const rents = new Rents(content);
+
+            return rents;
+        } catch (err) {
+            throw new Error(err);
+        }
+    };
+
+    async readRentalbyId (rental: Rental): Promise<Rents> {
         const {
             id
         } = rental;
@@ -48,14 +76,14 @@ export class MysqlRentalRepository implements IRentalRepository {
                     'rental.id AS id', 
                     'rental.idMovie AS idMovie',
                     'movie.title AS titleMovie', 
-                    'rental.email AS emailUser', 
+                    'rental.emailUser AS emailUser', 
                     'user.name AS nameUser', 
                     'status.name AS status', 
                     'rental.dateStart AS dateStart', 
                     'rental.dateEnd AS dateEnd'
                 )
                 .join('movie', 'rental.idMovie', 'movie.id')
-                .join('user', 'rental.idUser', 'user.id')
+                .join('user', 'rental.emailUser', 'user.email')
                 .join('status', 'rental.idStatus', 'status.id')
                 .where('rental.id', id);
             
@@ -64,7 +92,7 @@ export class MysqlRentalRepository implements IRentalRepository {
 
             return rents;
         } catch (err) {
-            return err;
+            throw new Error(err);
         }
     };
 
@@ -79,14 +107,14 @@ export class MysqlRentalRepository implements IRentalRepository {
                     'rental.id AS id', 
                     'rental.idMovie AS idMovie',
                     'movie.title AS titleMovie', 
-                    'rental.idUser AS idUser', 
+                    'rental.emailUser AS emailUser', 
                     'user.name AS nameUser', 
                     'status.name AS status', 
                     'rental.dateStart AS dateStart', 
                     'rental.dateEnd AS dateEnd'
                 )
                 .join('movie', 'rental.idMovie', 'movie.id')
-                .join('user', 'rental.idUser', 'user.id')
+                .join('user', 'rental.emailUser', 'user.email')
                 .join('status', 'rental.idStatus', 'status.id')
                 .where('rental.idMovie', idMovie);
             
@@ -95,13 +123,13 @@ export class MysqlRentalRepository implements IRentalRepository {
 
             return rents;
         } catch (err) {
-            return err;
+            throw new Error(err);
         }
     };
 
     async readRentalbyUser (rental: Rental): Promise<Rents> {
         const {
-            email
+            emailUser
         } = rental;
 
         try {
@@ -110,37 +138,49 @@ export class MysqlRentalRepository implements IRentalRepository {
                     'rental.id AS id', 
                     'rental.idMovie AS idMovie',
                     'movie.title AS titleMovie', 
-                    'rental.idUser AS idUser', 
+                    'rental.emailUser', 
                     'user.name AS nameUser', 
                     'status.name AS status', 
                     'rental.dateStart AS dateStart', 
                     'rental.dateEnd AS dateEnd'
                 )
                 .join('movie', 'rental.idMovie', 'movie.id')
-                .join('user', 'rental.idUser', 'user.id')
+                .join('user', 'rental.emailUser', 'user.email')
                 .join('status', 'rental.idStatus', 'status.id')
-                .where('rental.email', email);
+                .where('rental.email', emailUser);
             
             
             const rents = new Rents(content);
 
             return rents;
         } catch (err) {
-            return err;
+            throw new Error(err);
+        }
+    }
+
+    async readMoviebyStatus (movie: Movie): Promise<Movie> {
+        
+        const {
+            id
+        } = movie;
+
+        try {
+            const content = await db('movie').where('id', id).andWhere('idStatus', 1);
+
+            return new Movie(content[0]);
+        } catch (err) {
+            throw new Error(err);
         }
     }
 
     async updateRental(rental: Rental): Promise<void> {
-        const { 
-            id,
-            idStatus
-        } = rental;
-    
+        const { id } = rental;
+
         const trx = await db.transaction();
 
         try {
             await trx('rental').update({
-                idStatus
+                idStatus: 3
             }).where('id', id);
 
             const content = await trx('rental')
@@ -155,7 +195,7 @@ export class MysqlRentalRepository implements IRentalRepository {
 
             trx.commit();
         } catch (err) {
-            return err;   
+            throw new Error(err);
         }
     }
 }

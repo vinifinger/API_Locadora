@@ -7,7 +7,7 @@ export class MiddlewareController {
     ){}
 
     async handle(req: Request, res: Response, next: NextFunction): Promise<Response> {
-       const hash = String(req.headers.hash);
+       const hash = req.headers.authorization;
 
        try {
             const response = await this.middlewareUseCase.execute({
@@ -17,15 +17,13 @@ export class MiddlewareController {
            switch(response) {
                 case 0: 
                     return res.status(401).json({
-                        message: 'No token provided'
+                        message: 'No token provided.'
                     });
-                break;
 
                 case 1:
                     return res.status(401).json({
-                        message: 'Token invalid'
+                        message: 'Token invalid.'
                     });
-                break;
 
                 case 2:
                     next();
@@ -33,9 +31,13 @@ export class MiddlewareController {
 
                 case 3: 
                     return res.status(401).json({
-                        message: 'Login invalid'
+                        message: 'Login invalid.'
                     });
-                break;
+
+                case 4: 
+                    return res.status(401).json({
+                        message: 'Token in black list.'
+                    });
            }
        } catch (err) {
            return res.status(400).json({

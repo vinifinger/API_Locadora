@@ -10,16 +10,32 @@ export class JwtMiddlewareRepository implements IMiddlewareRepository {
 
         if (data === 'undefined')
             return 0; // No token provided
-        return jwt.verify(data, process.env.SECRET_STRING, (err, decoded) => {
+        return jwt.verify(data, process.env.SECRET_STRING, async (err, decoded) => {
             if (err) 
                 return 1; // Token invalid
-            const hash = new Hash(decoded);
+                
+            decoded.user.hash = data;
+
+            const hash = new Hash(decoded.user);
 
             try {    
-                const content = db('User').where('id', hash.id).andWhere('email', hash.email).andWhere('password', hash.password);
+                console.log('------')
+                console.log(decoded)
+                
+                const content = await db('User')
+                .where('email', hash.email)
+                .andWhere('password', hash.password)
+                .limit(1);
 
-                if (content) 
+                if (content.length) {
+                    const response = await db('blackList')
+                    .where('hash', hash.hash);
+
+                    if (response.length)
+                        return 4;
+                    
                     return 2;
+                }
 
             } catch (err) {
                 return 3;

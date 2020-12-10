@@ -7,7 +7,8 @@ import { createRentalController } from './useCases/Rental/CreateRental';
 import { readRentalController } from './useCases/Rental/ReadRental';
 import { updateRentalController } from './useCases/Rental/UpdateRental';
 import { createUserController } from './useCases/User/CreateUser';
-import { readUserController } from './useCases/User/ReadUser';
+import { logoffUserController } from './useCases/User/LogoffUser';
+import { loginUserController } from './useCases/User/LoginUser';
 
 const routes = Router();
 //--------------------------------------------------------
@@ -20,11 +21,11 @@ routes.get('/v1/movie', (request, response) => {
     return readMovieController.handle(request, response);
 });
 
-routes.put('/v1/movie/:id', (request, response) => {
+routes.put('/v1/movie', (request, response) => {
     return updateMovieController.handle(request, response);
 });
 
-routes.delete('/v1/movie/:id', (request, response) => {
+routes.delete('/v1/movie', (request, response) => {
     return deleteMovieController.handle(request, response);
 });
 
@@ -35,8 +36,13 @@ routes.post('/user', (request, response) => {
 });
 
 routes.post('/login', (request, response) => {
-    return readUserController.handle(request, response);
+    return loginUserController.handle(request, response);
 });
+
+routes.get('/v1/logoff', (request, response) => {
+    return logoffUserController.handle(request, response);
+});
+
 
 
 //----------------------------------------------------------

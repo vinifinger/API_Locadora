@@ -7,11 +7,11 @@ export class CreateRentalController {
     ){}
 
     async handle(req: Request, res: Response): Promise<Response> {
-       const { email, idMovie, idStatus, dateStart, dateEnd }  = req.body;
+       const { emailUser, idMovie, idStatus, dateStart, dateEnd }  = req.body;
 
        try {
             await this.createRentalUseCase.execute({
-                email,
+                emailUser,
                 idMovie,
                 idStatus,
                 dateStart,

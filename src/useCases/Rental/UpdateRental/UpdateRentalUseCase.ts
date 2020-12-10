@@ -7,9 +7,9 @@ export class UpdateRentalUseCase {
         private rentalRepository: IRentalRepository 
     ){}
     
-    async execute(data: IUpdateRentalRequestDTO): Promise<void> {
+    async execute(data: IUpdateRentalRequestDTO) {
         const rental = new Rental(data, data.id);
-        console.log('----- CREATE -----');
+        console.log('----- UPDATE -----');
         console.log(rental);
         
         return await this.rentalRepository.updateRental(rental);

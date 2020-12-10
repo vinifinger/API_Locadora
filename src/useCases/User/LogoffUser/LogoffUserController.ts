@@ -1,20 +1,20 @@
 import { Request, Response } from "express";
-import { UpdateRentalUseCase } from "./UpdateRentalUseCase";
+import { LogoffUserUseCase } from "./LogoffUserUseCase";
 
-export class UpdateRentalController {
+export class LogoffUserController {
     constructor(
-        private updateRentalUseCase: UpdateRentalUseCase,
+        private logoffUserUseCase: LogoffUserUseCase,
     ){}
 
     async handle(req: Request, res: Response): Promise<Response> {
-       const id = String(req.query.id);
+       const hash  = req.headers.authorization;
 
        try {
-            await this.updateRentalUseCase.execute({
-                id
+            await this.logoffUserUseCase.execute({
+                hash
            });
-
-           return res.status(201).send();
+           
+           return res.status(200).send();
        } catch (err) {
            return res.status(400).json({
                message: err.message || 'Unexpected error.'

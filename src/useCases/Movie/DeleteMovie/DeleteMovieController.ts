@@ -7,22 +7,20 @@ export class DeleteMovieController {
     ){}
 
     async handle(req: Request, res: Response): Promise<Response> {
-       const { title, director, image, description, category, producer, duration }  = req.body;
-       const { id } = req.params;
+
+       const id = String(req.query.id);
+
+       if (!id)
+        return res.status(400).json({
+            message: 'Invalid field.'
+        });
 
        try {
             await this.deleteMovieUseCase.execute({
-                id,
-                title,
-                director,
-                image,
-                description,
-                category,
-                producer,
-                duration,
+                id
            });
 
-           return res.status(201).send();
+           return res.status(200).send();
        } catch (err) {
            return res.status(400).json({
                message: err.message || 'Unexpected error.'
